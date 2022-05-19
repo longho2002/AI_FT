@@ -170,7 +170,9 @@ namespace Final_tearm
                 //lay ra id
                 chooseSource = Convert.ToInt32((sender as GunaImageButton).Parent.Controls[0].Text);
                 tb_source.Text = (sender as GunaImageButton).Parent.Controls[1].Text;
-                if (tb_source.Text.Trim() != "" && tb_des.Text.Trim() != "")
+                bool Ca = graph.name.Any(s => tb_source.Text.Trim().ToLower() == s.ToLower());
+                bool Cb = graph.name.Any(s => tb_des.Text.Trim().ToLower() == s.ToLower());
+                if (Ca && Cb)
                 {
                     progressBar1.Visible = true;
                     backgroundWorker.RunWorkerAsync();
@@ -250,10 +252,13 @@ namespace Final_tearm
             if (choosetb == 1)
             {
                 //curPicSrc.Location = new Point(curPicSrc.Location.X - 3 - 25, curPicSrc.Location.Y - 7 - 25);
-                curPicSrc.Width = 8;
-                curPicSrc.Height = 16;
-                curPicSrc.Image = Image.FromFile(Application.StartupPath + "\\Resources\\" + "icon_black.png");
-                curPicSrc.Location = new Point(curPicSrc.Location.X + 3 + 25, curPicSrc.Location.Y + 7 + 25);
+                if (curPicSrc != null)
+                {
+                    curPicSrc.Width = 8;
+                    curPicSrc.Height = 16;
+                    curPicSrc.Image = Image.FromFile(Application.StartupPath + "\\Resources\\" + "icon_black.png");
+                    curPicSrc.Location = new Point(curPicSrc.Location.X + 3 + 25, curPicSrc.Location.Y + 7 + 25);
+                }
                 int i = 0;
                 foreach (PictureBox item in pic_map.Controls)
                 {
@@ -275,10 +280,11 @@ namespace Final_tearm
             else
             {
                 //curPicDes.Location = new Point(curPicDes.Location.X - 3 - 25, curPicDes.Location.Y - 7 - 25);
+
                 curPicDes.Width = 8;
                 curPicDes.Height = 16;
                 curPicDes.Image = Image.FromFile(Application.StartupPath + "\\Resources\\" + "icon_black.png");
-                curPicDes.Location = new Point(curPicSrc.Location.X + 3 + 25, curPicSrc.Location.Y + 7 + 25);
+                curPicDes.Location = new Point(curPicDes.Location.X + 3 + 25, curPicDes.Location.Y + 7 + 25);
                 int i = 0;
                 foreach (PictureBox item in pic_map.Controls)
                 {
@@ -297,8 +303,10 @@ namespace Final_tearm
                 chooseDes = Convert.ToInt32((sender as Panel).Controls[0].Text);
                 tb_des.Text = (sender as Panel).Controls[1].Text;
             }
-          
-            if (tb_source.Text.Trim() != "" && tb_des.Text.Trim() != "")
+
+            bool Ca = graph.name.Any(s => tb_source.Text.Trim().ToLower() == s.ToLower());
+            bool Cb = graph.name.Any(s => tb_des.Text.Trim().ToLower() == s.ToLower());
+            if (Ca && Cb)
             {
                 progressBar1.Visible = true;
                 backgroundWorker.RunWorkerAsync();
@@ -378,7 +386,7 @@ namespace Final_tearm
                 curPicSrc.Location = new Point(curPicSrc.Location.X + 3 + 25, curPicSrc.Location.Y + 7 + 25);
             }
 
-            curPicSrc=null;
+            curPicSrc = null;
         }
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -397,6 +405,7 @@ namespace Final_tearm
         private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             pic_map.Invalidate();
+            pic_map.Paint -= pic_map_Paint;
             pic_map.Paint += pic_map_Paint;
             progressBar1.Visible = false;
             pan_res.Visible = true;
@@ -406,9 +415,10 @@ namespace Final_tearm
                 total += graph.graph[j, j + 1];
             }
 
-            lb_km.Text = Math.Round(total/20,2).ToString()+"km";
+            lb_km.Text = Math.Round(total / 20, 2).ToString() + "km";
             lb_avgspeed.Text = "50km/h";
-            lb_time.Text = Math.Round(total / 20 / 50,2).ToString() + "h";
+            lb_time.Text = Math.Round(total / 20 / 50, 2).ToString() + "h";
+
         }
 
 
