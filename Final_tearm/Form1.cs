@@ -392,8 +392,12 @@ namespace Final_tearm
         {
             if (curAlgorithm == 0)
                 A_star(chooseSource, chooseDes);
-            else
+            else if (curAlgorithm == 1)
                 Dijkstra(chooseSource, chooseDes);
+            else
+            {
+                Greedy(chooseSource, chooseDes);
+            }
         }
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
@@ -410,9 +414,9 @@ namespace Final_tearm
             progressBar1.Visible = false;
             pan_res.Visible = true;
             double total = 0;
-            for (int j = 1; j < c; j++)
+            for (int j = 0; j < c - 1; j++)
             {
-                total += graph.graph[j, j + 1];
+                total += graph.calc(tracing[j],tracing[j + 1]);
             }
 
             lb_km.Text = Math.Round(total / 20, 2).ToString() + "km";
@@ -428,6 +432,24 @@ namespace Final_tearm
             c = 0;
             int[] path;
             path = graph.a_star(src, des);
+            for (int i = 0; i < 33; i++)
+            {
+                tracing[i] = -1;
+            }
+            int e = des;
+            while (e != src)
+            {
+                tracing[c++] = e;
+                e = path[e];
+            }
+            tracing[c++] = src;
+        }
+
+        void Greedy(int src, int des)
+        {
+            c = 0;
+            int[] path;
+            path = graph.greedy(src, des);
             for (int i = 0; i < 33; i++)
             {
                 tracing[i] = -1;
@@ -469,6 +491,13 @@ namespace Final_tearm
         private void cb_Algorithm_SelectedIndexChanged(object sender, EventArgs e)
         {
             curAlgorithm = cb_Algorithm.SelectedIndex;
+            bool Ca = graph.name.Any(s => tb_source.Text.Trim().ToLower() == s.ToLower());
+            bool Cb = graph.name.Any(s => tb_des.Text.Trim().ToLower() == s.ToLower());
+            if (Ca && Cb)
+            {
+                progressBar1.Visible = true;
+                backgroundWorker.RunWorkerAsync();
+            }
         }
 
         private void btn_addbook_Click(object sender, EventArgs e)

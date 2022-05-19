@@ -321,7 +321,8 @@
             this.cb_Algorithm.FormattingEnabled = true;
             this.cb_Algorithm.Items.AddRange(new object[] {
             "A*",
-            "Dijkstra "});
+            "Dijkstra ",
+            "Greedy"});
             this.cb_Algorithm.Location = new System.Drawing.Point(15, 615);
             this.cb_Algorithm.Margin = new System.Windows.Forms.Padding(2);
             this.cb_Algorithm.Name = "cb_Algorithm";
